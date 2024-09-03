@@ -1,0 +1,27 @@
+name: Update Videos List
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: 'URL del video de Google Drive'
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update videos.txt
+        run: |
+          VIDEO_URL="${{ github.event.inputs.video_url }}"
+          echo "$VIDEO_URL" >> videos.txt
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add videos.txt
+          git commit -m "Agregar nueva URL de video"
+          git push
